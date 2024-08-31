@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cấu hình các file on AWS System Manager</title>
+    <link>//localhost:1313/vi/3-config/</link>
+    <description>Recent content in Cấu hình các file on AWS System Manager</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>vi</language>
+    <lastBuildDate>Thu, 01 Jan 1970 07:33:44 +0700</lastBuildDate>
+    <atom:link href="//localhost:1313/vi/3-config/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tạo file python dùng thư viện boto3</title>
+      <link>//localhost:1313/vi/3-config/3.3_script/</link>
+      <pubDate>Thu, 01 Jan 1970 07:33:44 +0700</pubDate>
+      <guid>//localhost:1313/vi/3-config/3.3_script/</guid>
+      <description>Viết code vào file upload_s3.py của mục scripts import boto3&#xD;import os&#xD;airflow_home = os.environ[&amp;#39;AIRFLOW_HOME&amp;#39;]&#xD;access_key = &amp;#39;your access key created&amp;#39;&#xD;secret_key = &amp;#39;your secret access key&amp;#39;&#xD;filepath = f&amp;#39;{airflow_home}/download/imdb_top1000.zip&amp;#39;&#xD;s3_bucket_name = &amp;#39;nghiavd-aws-bucket&amp;#39;&#xD;s3_file_name = &amp;#39;imdb_top1000.zip&amp;#39;&#xD;client = boto3.client(&#xD;&amp;#39;s3&amp;#39;,&#xD;aws_access_key_id=access_key,&#xD;aws_secret_access_key=secret_key&#xD;)&#xD;# Upload file lên S3&#xD;client.upload_file(filepath, s3_bucket_name, s3_file_name) access_key và secret_key có giá trị của trong files csv mình lưu lại ở bước tạo access key. Bạn lấy hai dãy đó thế vào là được.</description>
+    </item>
+  </channel>
+</rss>

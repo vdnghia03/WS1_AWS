@@ -1,0 +1,120 @@
+[
+{
+	"uri": "//localhost:1313/vi/",
+	"title": "Automate Load to S3",
+	"tags": [],
+	"description": "",
+	"content": "Tải dữ liệu tự động lên S3 sử dụng airflow va thư viện boto3 Tổng quan Ở bài thực hành này ta sẽ tìm hiểu cách automate load data to S3 một cách đơn giản. Automate load là một bước trong quy trình ETL mà cá data engineer thường làm. Vì vậy ở đây em sẽ load dữ liệu lên S3 một cách đơn giản nhất.\nAmazon S3 S3 (Amazon Simple Storage Service): Là dịch vụ đám mây lưu trữ do đó bạn có thể tải lên các tệp, các tài liệu, các dữ liệu tải về của người dùng hoặc các bản sao lưu.\nDocker Docker: Docker là một nền tảng cho developers và sysadmin để develop, deploy và run application với container. Nó cho phép tạo các môi trường độc lập và tách biệt để khởi chạy và phát triển ứng dụng và môi trường này được gọi là container. Ở bài học này ta sẽ sử dụng docker để kéo Image Aiflow từ Docker hub về. Sau đó chạy container với image airflow này để chạy Airflow trên môi trường localhost.\nAirflow Airflow : Airflow là một công cụ lập lịch trình cho luồng công việc của bạn cũng như hỗ trợ quản lý, theo dõi từng phần trong quy trình giúp bạn sửa lỗi, bảo trì code thuận tiện và dễ dàng. Trong bài học này, tôi sẽ sử dụng file có sẵn là imdb_top1000.zip tôi lấy từ kaggle để đưa lên S3. Sẽ không có bước ingest data theo từng ngày nên Airflow ở đây tôi dùng chỉ mang tính là cái tool chạy tự động để load lên S3 cho ngày hôm nay.\nboto3 Boto3: Boto3 là một thư viện Python mạnh mẽ được phát triển bởi Amazon Web Services (AWS) để tương tác với các dịch vụ của AWS. Trong trường hợp này, chúng ta sẽ tập trung vào việc sử dụng Boto3 để làm việc với dịch vụ lưu trữ đám mây của AWS S3.\nNội dung: Khởi tạo S3 Tải môi trường cần thiết Cấu hình các file Kiểm tra kết quả Dọn dẹp tài nguyên "
+},
+{
+	"uri": "//localhost:1313/vi/1-s3/",
+	"title": "Khởi tạo S3",
+	"tags": [],
+	"description": "",
+	"content": "Khởi tạo S3 Nội dung: Create Bucket S3 Create Access Key "
+},
+{
+	"uri": "//localhost:1313/vi/2-envrion/2.1_downloaddockerdesktop/",
+	"title": "Tải Docker Desktop",
+	"tags": [],
+	"description": "",
+	"content": " Lên google và gõ Docker Desktop for Window. Mình dùng window mà :)) Sau khi tải xuống giải nén chạy các kiểu thì sẽ được giao diện như hình. Khó quá thì lên youtube có chi tiết nhé "
+},
+{
+	"uri": "//localhost:1313/vi/1-s3/1.1_createbucket/",
+	"title": "Tao S3 Bucket",
+	"tags": [],
+	"description": "",
+	"content": "Tạo S3 bucket Ấn vào thanh tìm kiếm và chọn dịch vụ S3 Đặt tên và tạo bucket, ở đây mình chọn Region Singapore Các tùy chọn bên dưới mình để mặc định Sau đó mình chọn create Sau khi chọn create ta được kết quả như hình bên dưới "
+},
+{
+	"uri": "//localhost:1313/vi/3-config/3.1_download/",
+	"title": "Thêm file cần load vào mục download",
+	"tags": [],
+	"description": "",
+	"content": " Mình hơi tệ nên sẽ thực hiện ingest data vào mục Download một cách thủ công. Các bạn cố gắng nghĩ cách tải tự động về bằng một task của airflow luôn nha. Lên kaggle tải về và lưu ở mục Download là xong :)). Cố gắng nghĩ cách dùng BashOparator của airflow tự động tải về như là một task trong quy trình automate nhé. :v Nhớ lưu đúng thư mục Download của dự án\n"
+},
+{
+	"uri": "//localhost:1313/vi/3-config/3.2_dags/",
+	"title": "Cấu hình airflow",
+	"tags": [],
+	"description": "",
+	"content": " Viết code vào file upload_to_s3.py from datetime import datetime\rfrom airflow import DAG\rfrom airflow.operators.bash import BashOperator\rfrom airflow.operators.python import PythonOperator\rimport os\rairflow_home = os.environ[\u0026#39;AIRFLOW_HOME\u0026#39;]\rwith DAG(\rdag_id=\u0026#39;aws_workshop1\u0026#39;\r, start_date=datetime(2024, 8, 29)\r, schedule_interval=\u0026#39;@daily\u0026#39;\r) as dag:\rload_to_s3 = BashOperator(\rtask_id=\u0026#39;load_s3\u0026#39;\r, bash_command=f\u0026#39;python {airflow_home}/scripts/upload_s3.py\u0026#39;\r)\rload_to_s3 Các đường dẫn có được như f\u0026rsquo;python {airflow_home}/scripts/upload_s3.py\u0026rsquo; là theo đường dẫn của docker. Nếu bạn thay đổi thì tìm hiểu thêm, còn không thì làm giống mình để không bị lỗi.\nGiải thích sơ qua về code Step1: Import các thư viện Step2: Lấy biến môi trường AIRFLOW_HOME: Step3: Định nghĩa DAG: Step4: Định nghĩa Task: Step5: Chạy DAG: Lên chat gpt hỏi thì sẽ giải thích cụ thể cho mình.\n"
+},
+{
+	"uri": "//localhost:1313/vi/2-envrion/2.2_installpackagepycharm/",
+	"title": "Tải các package cần thiết cho pycharm",
+	"tags": [],
+	"description": "",
+	"content": " Mình dùng Pycharm chạy project. Trước tiên mình sẽ tạo một file project. Mối trường python 3.8 Vào setting và tải các thư viện python cần thiết.\nTải Apache Aiflow Tải thư viện boto3 làm tương tự Airflow Khi tải các package các bạn chú ý cái version của nó. Vì sẽ có các cái version nó không có hỗ trợ được với các tool khác. Mình thì mình sử dụng version như trong ảnh. Nếu các bạn bị lỗi version thì tự thử các version khác nhé\n"
+},
+{
+	"uri": "//localhost:1313/vi/2-envrion/",
+	"title": "Tải môi trường cần thiết",
+	"tags": [],
+	"description": "",
+	"content": "Environment for Project Nội dung: Tải Docker Desktop Tải các package cần thiết cho pycharm Cấu trúc thư mục "
+},
+{
+	"uri": "//localhost:1313/vi/1-s3/1.2_createaccesskey/",
+	"title": "Tạo access key",
+	"tags": [],
+	"description": "",
+	"content": "Tạo access key trong AMI Chọn vào AMI Chọn vào user và admin user Admin User mình có được là từ lab0001 (https://000001.awsstudygroup.com/vi/). Và mình sử dụng Admin User để đăng nhập vào AWS thay vì dùng root user Chọn Security credentials và sau đó chọn create access key để bắt đầu tạo access key\nCấu hình access key Ở trên một là bạn nhớ hai dãy số là Access key và Secret access key Hai là bạn download file csv bên dưới và lưu nó trong ổ đĩa của mình. Nó sẽ lưu cho bạn Access key và Secret access key Hãy chắc chắn rằng bạn đã lưu access key và secret access key. Đây là tham số quan trọng ta đưa vào code python sử dụng thư viện boto3 để kết nối đến aws S3\nCuối cùng chọn Done, và như hình bên dưới thì bạn đã có được một access key "
+},
+{
+	"uri": "//localhost:1313/vi/3-config/",
+	"title": "Cấu hình các file",
+	"tags": [],
+	"description": "",
+	"content": "Cấu hình các file Nội dung: Thêm file cần load vào mục download Cấu hình code cho airflow Tạo file python dùng thư viện boto3 Cau hình Docker-compose.yml "
+},
+{
+	"uri": "//localhost:1313/vi/2-envrion/2.3_schemafolder/",
+	"title": "Cấu trúc thư mục",
+	"tags": [],
+	"description": "",
+	"content": " Thư mục trong pycharm mình tổ chức như trong ảnh\nFolder Render Hiểu sơ qua về các thư mục\nDags: Đây là thư mục ánh xạ tới ổ đĩa /opt/airflow/Dags trong Docker Desktop của ta. Đây là nơi chuyển các dòng code ta viết trên local và đưa lên airflow Download: Đây là thư mục ánh xạ tới ổ đĩa /opt/airflow/Download trong Docker Desktop của ta. Ở đây Download là thư mục mà có tác dụng là kéo dữ liệu về từ các Resource khác và lưu ở đây. Scripts: Đây là thư mục ánh xạ tới ổ đĩa /opt/airflow/Scripts trong Docker Desktop của ta. Thực hiện tác vụ Load lên S3 bằng code python Docker-compose.yml: Kéo image từ docker hub về. "
+},
+{
+	"uri": "//localhost:1313/vi/3-config/3.3_script/",
+	"title": "Tạo file python dùng thư viện boto3",
+	"tags": [],
+	"description": "",
+	"content": " Viết code vào file upload_s3.py của mục scripts import boto3\rimport os\rairflow_home = os.environ[\u0026#39;AIRFLOW_HOME\u0026#39;]\raccess_key = \u0026#39;your access key created\u0026#39;\rsecret_key = \u0026#39;your secret access key\u0026#39;\rfilepath = f\u0026#39;{airflow_home}/download/imdb_top1000.zip\u0026#39;\rs3_bucket_name = \u0026#39;nghiavd-aws-bucket\u0026#39;\rs3_file_name = \u0026#39;imdb_top1000.zip\u0026#39;\rclient = boto3.client(\r\u0026#39;s3\u0026#39;,\raws_access_key_id=access_key,\raws_secret_access_key=secret_key\r)\r# Upload file lên S3\rclient.upload_file(filepath, s3_bucket_name, s3_file_name) access_key và secret_key có giá trị của trong files csv mình lưu lại ở bước tạo access key. Bạn lấy hai dãy đó thế vào là được.\nCác đường dẫn có được như f\u0026rsquo;{airflow_home}/download/imdb_top1000.zip\u0026rsquo; là theo đường dẫn của docker. Nếu bạn thay đổi thì tìm hiểu thêm, còn không thì làm giống mình để không bị lỗi.\n"
+},
+{
+	"uri": "//localhost:1313/vi/3-config/3.4_dockercompose/",
+	"title": "Cau hình Docker-compose.yml",
+	"tags": [],
+	"description": "",
+	"content": " Quan trọng nhất, ta chạy trong localhost nên cần phải có docker. Trong tương lai ta sẽ set up mọi thứ lên EC2 chạy airflow và các dòng code lên đưa lên tu local bằng putty luôn. Còn giờ ta chưa thành thạo nên làm airflow trên docker trước. version: \u0026#39;3.0\u0026#39;\rservices:\rLoad_s3_use_airflow:\rimage: apache/airflow:2.3.0-python3.8\rvolumes:\r- ./dags:/opt/airflow/dags\r- ./download:/opt/airflow/download\r- ./scripts:/opt/airflow/scripts\rports:\r- 8080:8080\rcommand: bash -c \u0026#39;(airflow db init \u0026amp;\u0026amp; airflow users create --username admin --password admin --firstname nghia --lastname vd --role Admin --email voduyanqn1972@gmail.com); airflow webserver \u0026amp; airflow scheduler\u0026#39;\rvolumes:\rdags:\rdownload:\rscripts: Để ý ta thấy trong volumn set up ta đưa vào các thư mục ta đã tạo như dags, download, scripts. Ở comand bạn đổi là email name password của thì vẫn được nha.\n"
+},
+{
+	"uri": "//localhost:1313/vi/4-result/",
+	"title": "Kiểm tra kết quả",
+	"tags": [],
+	"description": "",
+	"content": " Chạy lệnh docker compose up trên cmd để build image. Phải bật docker desktop trước khi chạy lệnh docker compose up\nMở localhost cổng 8080 để chạy airflow Hiện màu xanh đậm như thế là thành công.\nKiểm tra lại trên S3 Complete "
+},
+{
+	"uri": "//localhost:1313/vi/5-clean/",
+	"title": "Dọn dẹp tài nguyên",
+	"tags": [],
+	"description": "",
+	"content": "Ta chỉ cần dọn S3. Thao tác này nhanh. Bạn tự dọn. "
+},
+{
+	"uri": "//localhost:1313/vi/categories/",
+	"title": "Categories",
+	"tags": [],
+	"description": "",
+	"content": ""
+},
+{
+	"uri": "//localhost:1313/vi/tags/",
+	"title": "Tags",
+	"tags": [],
+	"description": "",
+	"content": ""
+}]
